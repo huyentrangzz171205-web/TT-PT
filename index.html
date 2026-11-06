@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ứng Dụng Trắc Nghiệm Truyền Thông Đa Phương Tiện</title>
+    <title>Ứng Dụng Trắc Nghiệm Truyền Thông Đa Phương Tiện (Đa Dạng Dạng Bổ Sung)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -15,7 +15,7 @@
         <!-- Tiêu đề ứng dụng -->
         <header class="text-center mb-8">
             <h1 class="text-3xl font-bold text-indigo-600 mb-2">Trắc Nghiệm Truyền Thông Đa Phương Tiện</h1>
-            <p class="text-slate-500">Ôn tập kiến thức truyền thông vô tuyến, phổ điện từ, MIMO & Wi-Fi thế hệ mới</p>
+            <p class="text-slate-500">Ôn tập kiến thức với 3 dạng: Trắc nghiệm A/B/C/D, Điền từ & Ghép nối</p>
         </header>
 
         <!-- Thanh điều hướng Tab -->
@@ -38,31 +38,37 @@
 
             <!-- Nội dung câu hỏi & Hình ảnh minh họa -->
             <div class="mb-6">
-                <!-- Vùng hiển thị ảnh minh họa -->
                 <div id="question-image-container" class="mb-4 hidden text-center">
                     <img id="question-image" src="" alt="Minh họa câu hỏi" class="max-h-64 mx-auto rounded-xl border border-slate-200 shadow-sm object-contain">
                 </div>
 
+                <div class="flex items-center gap-2 mb-2">
+                    <span id="question-type-badge" class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Trắc nghiệm</span>
+                </div>
+
                 <h2 id="question-title" class="text-xl font-bold text-slate-800 mb-4 leading-relaxed">Đang tải câu hỏi...</h2>
                 
-                <!-- Danh sách đáp án -->
-                <div id="options-container" class="space-y-3">
-                    <!-- Render JS -->
+                <!-- Khu vực tương tác trả lời (Dùng chung cho các dạng) -->
+                <div id="interactive-container" class="space-y-4">
+                    <!-- Dynamic Render JS -->
                 </div>
             </div>
 
             <!-- Khu vực giải thích đáp án -->
             <div id="explanation-box" class="hidden mb-6 p-4 rounded-xl text-sm border"></div>
 
-            <!-- Nút chuyển câu -->
-            <div class="flex justify-end">
+            <!-- Nút kiểm tra / Chuyển câu -->
+            <div class="flex justify-end gap-3">
+                <button id="submit-answer-btn" onclick="checkCurrentAnswer()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-6 py-2.5 rounded-xl transition-all shadow-md">
+                    Xác nhận câu trả lời 🚀
+                </button>
                 <button id="next-btn" onclick="nextQuestion()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2.5 rounded-xl transition-all shadow-md">
                     Câu tiếp theo ➡️
                 </button>
             </div>
         </div>
 
-        <!-- MÀN HÌNH 2: QUẢN LÝ CÂU HỎI (THÊM / SỬA / XÓA) -->
+        <!-- MÀN HÌNH 2: QUẢN LÝ CÂU HỎI -->
         <div id="section-manage" class="hidden space-y-6">
             <!-- Form Thêm / Sửa câu hỏi -->
             <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-100">
@@ -71,23 +77,31 @@
                     <input type="hidden" id="edit-index" value="-1">
                     <input type="hidden" id="base64-image" value="">
 
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Nội dung câu hỏi:</label>
-                        <textarea id="input-question" required rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Nhập câu hỏi..."></textarea>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Dạng câu hỏi:</label>
+                            <select id="input-type" onchange="toggleFormFields()" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <option value="mc">Trắc nghiệm (Chữ A, B, C, D)</option>
+                                <option value="fill">Điền từ vào chỗ trống</option>
+                                <option value="matching">Ghép nối vế câu</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <!-- Khu vực chọn ảnh từ máy / điện thoại -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Nội dung câu hỏi / Đề bài:</label>
+                        <textarea id="input-question" required rows="2" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Nhập câu hỏi..."></textarea>
+                    </div>
+
+                    <!-- Khu vực chọn ảnh -->
                     <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
                         <label class="block text-sm font-bold text-indigo-900 mb-2">📷 Hình ảnh minh họa (Tùy chọn):</label>
                         <div class="flex flex-col md:flex-row gap-3 items-start md:items-center">
                             <input type="file" id="input-file" accept="image/*" onchange="handleFileSelect(event)" class="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer">
-                            <span class="text-xs text-slate-400">hoặc dán Link ảnh:</span>
+                            <span class="text-xs text-slate-400">hoặc URL ảnh:</span>
                             <input type="url" id="input-image-url" oninput="handleUrlInput(event)" class="flex-1 w-full px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="https://example.com/image.jpg">
                         </div>
-                        
-                        <!-- Vùng xem trước ảnh -->
                         <div id="preview-container" class="mt-3 hidden">
-                            <p class="text-xs text-slate-500 mb-1">Ảnh xem trước:</p>
                             <div class="relative inline-block">
                                 <img id="preview-img" src="" class="max-h-32 rounded-lg border border-slate-300 shadow-sm object-contain">
                                 <button type="button" onclick="clearImage()" class="absolute -top-2 -right-2 bg-rose-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center shadow-md">✕</button>
@@ -95,39 +109,51 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Đáp án A:</label>
-                            <input type="text" id="input-opt-0" required class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Đáp án A">
+                    <!-- Trường dành riêng cho TRẮC NGHIỆM MC -->
+                    <div id="form-mc-fields" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" id="input-opt-0" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:outline-none" placeholder="Đáp án A">
+                            <input type="text" id="input-opt-1" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:outline-none" placeholder="Đáp án B">
+                            <input type="text" id="input-opt-2" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:outline-none" placeholder="Đáp án C">
+                            <input type="text" id="input-opt-3" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:outline-none" placeholder="Đáp án D">
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Đáp án B:</label>
-                            <input type="text" id="input-opt-1" required class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Đáp án B">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Đáp án C:</label>
-                            <input type="text" id="input-opt-2" required class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Đáp án C">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Đáp án D:</label>
-                            <input type="text" id="input-opt-3" required class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Đáp án D">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Đáp án đúng:</label>
-                            <select id="input-correct" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <select id="input-correct-mc" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:outline-none">
                                 <option value="0">Đáp án A</option>
                                 <option value="1">Đáp án B</option>
                                 <option value="2">Đáp án C</option>
                                 <option value="3">Đáp án D</option>
                             </select>
                         </div>
+                    </div>
+
+                    <!-- Trường dành riêng cho ĐIỀN TỪ -->
+                    <div id="form-fill-fields" class="hidden space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Giải thích chi tiết:</label>
-                            <input type="text" id="input-explanation" required class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Nhập lý do đúng...">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Từ/Cụm từ đúng cần điền:</label>
+                            <input type="text" id="input-fill-answer" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:outline-none" placeholder="Ví dụ: Hertz">
                         </div>
                     </div>
+
+                    <!-- Trường dành riêng cho GHÉP NỐI -->
+                    <div id="form-matching-fields" class="hidden space-y-3">
+                        <label class="block text-sm font-medium text-slate-700">Tạo các cặp ghép nối đúng tương ứng (Vế A ↔ Vế B):</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="match-left-0" placeholder="Vế 1 (Ví dụ: 802.11n)" class="px-3 py-1.5 border rounded-lg text-sm">
+                            <input type="text" id="match-right-0" placeholder="Vế tương ứng (Ví dụ: Wi-Fi 4)" class="px-3 py-1.5 border rounded-lg text-sm">
+                            <input type="text" id="match-left-1" placeholder="Vế 2" class="px-3 py-1.5 border rounded-lg text-sm">
+                            <input type="text" id="match-right-1" placeholder="Vế tương ứng" class="px-3 py-1.5 border rounded-lg text-sm">
+                            <input type="text" id="match-left-2" placeholder="Vế 3" class="px-3 py-1.5 border rounded-lg text-sm">
+                            <input type="text" id="match-right-2" placeholder="Vế tương ứng" class="px-3 py-1.5 border rounded-lg text-sm">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Giải thích chi tiết:</label>
+                        <input type="text" id="input-explanation" required class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Nhập lý do đúng...">
+                    </div>
+
                     <div class="flex space-x-3 pt-2">
                         <button type="submit" id="submit-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2.5 rounded-xl transition-all shadow-md">
                             Lưu Câu Hỏi
@@ -145,9 +171,7 @@
                     <h2 class="text-xl font-bold text-slate-800">📋 Danh Sách Câu Hỏi Hiện Có</h2>
                     <button onclick="resetToDefaultQuestions()" class="text-sm text-red-600 hover:underline">Khôi phục mặc định</button>
                 </div>
-                <div id="questions-list" class="space-y-4">
-                    <!-- Render danh sách quản lý -->
-                </div>
+                <div id="questions-list" class="space-y-4"></div>
             </div>
         </div>
     </div>
@@ -158,6 +182,7 @@
 
         const defaultQuestions = [
             {
+                type: "mc",
                 question: "Theo đặc tính vật lý của sóng điện từ trong môi trường truyền vô tuyến, khi tần số sóng truyền lan vượt quá ngưỡng 100 MHz thì sóng có xu hướng lan truyền theo đặc điểm nào?",
                 image: "",
                 options: [
@@ -170,31 +195,26 @@
                 explanation: "Khi tần số trên 100 MHz, sóng vô tuyến lan truyền gần như theo đường thẳng (Line of Sight) và tập trung trong phạm vi hẹp."
             },
             {
-                question: "Điểm khác biệt cơ bản về mặt luồng dữ liệu giữa công nghệ Single-User MIMO (802.11n) và Multi-User MIMO (802.11ac) là gì?",
+                type: "fill",
+                question: "Đơn vị đo tần số trong hệ thống đo lường quốc tế (viết tắt là Hz) được đặt theo tên của nhà vật lý người Đức Heinrich Rudolf ______?",
                 image: "",
-                options: [
-                    "SU-MIMO phát 4 luồng đến 4 thiết bị cùng lúc, còn MU-MIMO gộp 4 luồng cho 1 thiết bị.",
-                    "SU-MIMO tập trung toàn bộ các luồng dữ liệu tới 1 địa chỉ duy nhất tại mỗi thời điểm; còn MU-MIMO cho phép truyền đồng thời các luồng đến nhiều thiết bị khác nhau.",
-                    "SU-MIMO dùng sóng hồng ngoại, còn MU-MIMO dùng cáp quang.",
-                    "Cả hai công nghệ đều phát đơn luồng tuần tự."
-                ],
-                correct: 1,
-                explanation: "SU-MIMO chỉ phục vụ lần lượt từng địa chỉ thiết bị tại mỗi thời điểm. MU-MIMO cho phép Access Point phân chia nhiều luồng sóng phát tới nhiều thiết bị cùng một lúc trên cùng băng tần."
+                correctAnswer: "Hertz",
+                explanation: "Tên nhà vật lý Heinrich Rudolf Hertz được dùng làm tên đơn vị đo tần số (Hertz - Hz) để vinh danh công lao thực nghiệm chứng minh sóng điện từ."
             },
             {
-                question: "Công nghệ BSS Color được giới thiệu trên chuẩn Wi-Fi 6 (802.11ax) có tác dụng gì trong việc tối ưu mạng không dây?",
+                type: "matching",
+                question: "Hãy ghép nối chuẩn mạng không dây IEEE 802.11 ở cột bên trái với tên thương mại Wi-Fi tương ứng ở cột bên phải:",
                 image: "",
-                options: [
-                    "Tô màu giao diện trình quản lý mạng.",
-                    "Đánh dấu ('nhuộm màu') các nguồn nhiễu để thiết bị nhận biết và bỏ qua, giảm xung đột kênh.",
-                    "Phân chia màu sắc riêng biệt cho từng băng tần 2.4GHz và 5GHz.",
-                    "Mã hóa màu cho mật khẩu Wi-Fi."
+                pairs: [
+                    { left: "IEEE 802.11n", right: "Wi-Fi 4" },
+                    { left: "IEEE 802.11ac", right: "Wi-Fi 5" },
+                    { left: "IEEE 802.11ax", right: "Wi-Fi 6" }
                 ],
-                correct: 1,
-                explanation: "BSS Color đánh dấu mã màu cho các tín hiệu cùng kênh từ mạng lân cận, giúp thiết bị loại bỏ nhiễu và tránh nghẽn mạng."
+                explanation: "802.11n là Wi-Fi 4, 802.11ac là Wi-Fi 5, và 802.11ax là Wi-Fi 6."
             },
             {
-                question: "Chuẩn mạng không dây thế hệ mới IEEE 802.11be (Wi-Fi 7) sở hữu công nghệ đột phá nào cho phép thiết bị kết nối đồng thời trên nhiều băng tần (2.4 GHz, 5 GHz và 6 GHz)?",
+                type: "mc",
+                question: "Chuẩn mạng không dây thế hệ mới IEEE 802.11be (Wi-Fi 7) sở hữu công nghệ đột phá nào cho phép thiết bị kết nối đồng thời trên nhiều băng tần?",
                 image: "",
                 options: [
                     "Adaptive Beamforming",
@@ -203,7 +223,7 @@
                     "Single-User Spatial Stream"
                 ],
                 correct: 1,
-                explanation: "Công nghệ Multi-Link Operation (MLO) trên Wi-Fi 7 cho phép thiết bị kết nối song song nhiều dải tần cùng lúc để đạt tốc độ cực đại và độ trễ siêu thấp."
+                explanation: "Công nghệ Multi-Link Operation (MLO) trên Wi-Fi 7 cho phép kết nối đồng thời nhiều dải tần."
             }
         ];
 
@@ -211,6 +231,10 @@
         let currentIdx = 0;
         let score = 0;
         let answeredCurrent = false;
+
+        // Trạng thái ghép nối tạm thời
+        let selectedMatchLeft = null;
+        let userMatches = {}; 
 
         function switchTab(tab) {
             const quizSec = document.getElementById('section-quiz');
@@ -235,24 +259,34 @@
 
         function loadQuiz() {
             answeredCurrent = false;
+            selectedMatchLeft = null;
+            userMatches = {};
+
             document.getElementById('next-btn').classList.add('hidden');
+            document.getElementById('submit-answer-btn').classList.add('hidden');
             document.getElementById('explanation-box').classList.add('hidden');
 
             if (questions.length === 0) {
                 document.getElementById('question-progress').innerText = "Trống";
-                document.getElementById('question-title').innerText = "Hiện chưa có câu hỏi nào. Vui lòng sang tab 'Quản Lý Câu Hỏi' để thêm mới!";
-                document.getElementById('options-container').innerHTML = "";
-                document.getElementById('question-image-container').classList.add('hidden');
+                document.getElementById('question-title').innerText = "Chưa có câu hỏi nào trong danh sách!";
+                document.getElementById('interactive-container').innerHTML = "";
                 return;
             }
 
             if (currentIdx >= questions.length) currentIdx = 0;
-
             const q = questions[currentIdx];
+
             document.getElementById('question-progress').innerText = `Câu ${currentIdx + 1} / ${questions.length}`;
             document.getElementById('score-display').innerText = `Điểm: ${score}`;
             document.getElementById('question-title').innerText = q.question;
 
+            // Type badge
+            const badge = document.getElementById('question-type-badge');
+            if (q.type === 'fill') badge.innerText = "Điền từ vào chỗ trống";
+            else if (q.type === 'matching') badge.innerText = "Ghép nối cặp từ";
+            else badge.innerText = "Trắc nghiệm chọn 1";
+
+            // Image
             const imgContainer = document.getElementById('question-image-container');
             const imgEl = document.getElementById('question-image');
             if (q.image && q.image.trim() !== "") {
@@ -262,22 +296,56 @@
                 imgContainer.classList.add('hidden');
             }
 
-            let html = "";
-            q.options.forEach((opt, idx) => {
-                html += `<button onclick="selectAnswer(${idx})" id="opt-${idx}" class="w-full text-left p-4 rounded-xl border border-slate-200 hover:bg-indigo-50 hover:border-indigo-300 transition-all font-medium text-slate-700">${String.fromCharCode(65 + idx)}. ${opt}</button>`;
-            });
-            document.getElementById('options-container').innerHTML = html;
+            // Render theo từng loại câu hỏi
+            const container = document.getElementById('interactive-container');
+            container.innerHTML = "";
+
+            if (q.type === 'fill') {
+                container.innerHTML = `
+                    <div class="flex flex-col gap-2">
+                        <input type="text" id="fill-user-input" class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-lg" placeholder="Nhập đáp án của bạn vào đây...">
+                    </div>
+                `;
+                document.getElementById('submit-answer-btn').classList.remove('hidden');
+            } else if (q.type === 'matching') {
+                // Shuffle right column
+                const rightShuffled = [...q.pairs].map(p => p.right).sort(() => Math.random() - 0.5);
+                
+                let html = `<p class="text-xs text-slate-500 mb-2">Bấm chọn 1 vế ở Cột A, sau đó bấm chọn vế tương ứng ở Cột B để nối:</p><div class="grid grid-cols-2 gap-4">`;
+                
+                html += `<div class="space-y-2" id="match-left-col">`;
+                q.pairs.forEach((p, idx) => {
+                    html += `<button onclick="selectMatchLeft('${p.left}')" id="btn-left-${idx}" class="match-left-btn w-full text-left p-3 rounded-xl border border-slate-200 bg-white hover:border-indigo-400 text-sm font-medium transition-all">${p.left}</button>`;
+                });
+                html += `</div>`;
+
+                html += `<div class="space-y-2" id="match-right-col">`;
+                rightShuffled.forEach((rVal, idx) => {
+                    html += `<button onclick="selectMatchRight('${rVal}')" id="btn-right-${idx}" class="match-right-btn w-full text-left p-3 rounded-xl border border-slate-200 bg-white hover:border-indigo-400 text-sm font-medium transition-all">${rVal}</button>`;
+                });
+                html += `</div></div>`;
+
+                container.innerHTML = html;
+                document.getElementById('submit-answer-btn').classList.remove('hidden');
+            } else {
+                // Multiple choice
+                let html = "";
+                q.options.forEach((opt, idx) => {
+                    html += `<button onclick="selectMcAnswer(${idx})" id="opt-${idx}" class="w-full text-left p-4 rounded-xl border border-slate-200 hover:bg-indigo-50 hover:border-indigo-300 transition-all font-medium text-slate-700">${String.fromCharCode(65 + idx)}. ${opt}</button>`;
+                });
+                container.innerHTML = html;
+            }
         }
 
-        function selectAnswer(selectedIdx) {
+        // Logic Trắc nghiệm MC
+        function selectMcAnswer(selectedIdx) {
             if (answeredCurrent) return;
             answeredCurrent = true;
 
             const q = questions[currentIdx];
             const correctIdx = q.correct;
-            const explanationBox = document.getElementById('explanation-box');
 
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < q.options.length; i++) {
                 const btn = document.getElementById(`opt-${i}`);
                 if (!btn) continue;
                 btn.disabled = true;
@@ -290,16 +358,71 @@
                 }
             }
 
-            if (selectedIdx === correctIdx) {
+            finishQuestion(selectedIdx === correctIdx);
+        }
+
+        // Logic Ghép nối matching
+        function selectMatchLeft(val) {
+            if (answeredCurrent) return;
+            selectedMatchLeft = val;
+            document.querySelectorAll('.match-left-btn').forEach(b => {
+                if (b.innerText === val) b.classList.add('ring-2', 'ring-indigo-500', 'bg-indigo-50');
+                else b.classList.remove('ring-2', 'ring-indigo-500', 'bg-indigo-50');
+            });
+        }
+
+        function selectMatchRight(val) {
+            if (answeredCurrent || !selectedMatchLeft) return;
+            userMatches[selectedMatchLeft] = val;
+
+            // Highlight đã nối
+            document.querySelectorAll('.match-right-btn').forEach(b => {
+                if (b.innerText === val) b.classList.add('bg-indigo-100', 'border-indigo-500');
+            });
+            selectedMatchLeft = null;
+        }
+
+        // Kiểm tra chung cho Điền từ & Ghép nối khi nhấn "Xác nhận câu trả lời"
+        function checkCurrentAnswer() {
+            if (answeredCurrent) return;
+            answeredCurrent = true;
+
+            const q = questions[currentIdx];
+            let isCorrect = false;
+
+            if (q.type === 'fill') {
+                const userVal = document.getElementById('fill-user-input').value.trim().toLowerCase();
+                const correctVal = q.correctAnswer.trim().toLowerCase();
+                isCorrect = (userVal === correctVal);
+                document.getElementById('fill-user-input').disabled = true;
+            } else if (q.type === 'matching') {
+                let matchCount = 0;
+                q.pairs.forEach(p => {
+                    if (userMatches[p.left] === p.right) matchCount++;
+                });
+                isCorrect = (matchCount === q.pairs.length);
+            }
+
+            finishQuestion(isCorrect);
+        }
+
+        function finishQuestion(isCorrect) {
+            const q = questions[currentIdx];
+            const explanationBox = document.getElementById('explanation-box');
+
+            if (isCorrect) {
                 score++;
                 explanationBox.className = "mb-6 p-4 rounded-xl text-sm border border-emerald-200 bg-emerald-50 text-emerald-800";
                 explanationBox.innerHTML = `<strong>Chính xác! 🎉</strong><br>${q.explanation}`;
             } else {
                 explanationBox.className = "mb-6 p-4 rounded-xl text-sm border border-rose-200 bg-rose-50 text-rose-800";
-                explanationBox.innerHTML = `<strong>Chưa chính xác! ❌</strong><br>${q.explanation}`;
+                let extra = q.type === 'fill' ? `<br><strong>Đáp án đúng là:</strong> ${q.correctAnswer}` : '';
+                explanationBox.innerHTML = `<strong>Chưa chính xác! ❌</strong>${extra}<br>${q.explanation}`;
             }
+
             explanationBox.classList.remove('hidden');
             document.getElementById('score-display').innerText = `Điểm: ${score}`;
+            document.getElementById('submit-answer-btn').classList.add('hidden');
             document.getElementById('next-btn').classList.remove('hidden');
         }
 
@@ -309,16 +432,95 @@
             loadQuiz();
         }
 
+        // Toggle Form nhập theo Dạng
+        function toggleFormFields() {
+            const type = document.getElementById('input-type').value;
+            document.getElementById('form-mc-fields').classList.toggle('hidden', type !== 'mc');
+            document.getElementById('form-fill-fields').classList.toggle('hidden', type !== 'fill');
+            document.getElementById('form-matching-fields').classList.toggle('hidden', type !== 'matching');
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const editIdx = parseInt(document.getElementById('edit-index').value);
+            const type = document.getElementById('input-type').value;
+            const questionText = document.getElementById('input-question').value;
+            const imageUrl = document.getElementById('base64-image').value;
+            const explanation = document.getElementById('input-explanation').value;
+
+            let newQ = { type, question: questionText, image: imageUrl, explanation };
+
+            if (type === 'mc') {
+                newQ.options = [
+                    document.getElementById('input-opt-0').value,
+                    document.getElementById('input-opt-1').value,
+                    document.getElementById('input-opt-2').value,
+                    document.getElementById('input-opt-3').value
+                ];
+                newQ.correct = parseInt(document.getElementById('input-correct-mc').value);
+            } else if (type === 'fill') {
+                newQ.correctAnswer = document.getElementById('input-fill-answer').value;
+            } else if (type === 'matching') {
+                newQ.pairs = [];
+                for (let i = 0; i < 3; i++) {
+                    const l = document.getElementById(`match-left-${i}`).value;
+                    const r = document.getElementById(`match-right-${i}`).value;
+                    if (l && r) newQ.pairs.push({ left: l, right: r });
+                }
+            }
+
+            if (editIdx === -1) {
+                questions.push(newQ);
+            } else {
+                questions[editIdx] = newQ;
+            }
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
+            resetForm();
+            renderManageList();
+            alert("Đã lưu câu hỏi thành công!");
+        }
+
+        function renderManageList() {
+            const listContainer = document.getElementById('questions-list');
+            if (questions.length === 0) {
+                listContainer.innerHTML = "<p class='text-slate-500 text-center py-4'>Chưa có câu hỏi nào trong hệ thống.</p>";
+                return;
+            }
+
+            let html = "";
+            questions.forEach((q, idx) => {
+                let typeTitle = q.type === 'fill' ? 'Điền từ' : (q.type === 'matching' ? 'Ghép nối' : 'Trắc nghiệm');
+                html += `
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
+                        <div class="flex justify-between items-start">
+                            <span class="font-bold text-indigo-600 text-sm">Câu ${idx + 1} (${typeTitle})</span>
+                            <div class="space-x-2">
+                                <button onclick="deleteQuestion(${idx})" class="text-xs bg-rose-500 hover:bg-rose-600 text-white px-3 py-1 rounded-lg">Xóa</button>
+                            </div>
+                        </div>
+                        <p class="font-medium text-slate-800">${q.question}</p>
+                    </div>
+                `;
+            });
+            listContainer.innerHTML = html;
+        }
+
+        function deleteQuestion(idx) {
+            if (confirm("Xóa câu hỏi này?")) {
+                questions.splice(idx, 1);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
+                renderManageList();
+            }
+        }
+
         function handleFileSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(evt) {
-                const base64Str = evt.target.result;
-                document.getElementById('base64-image').value = base64Str;
-                document.getElementById('input-image-url').value = "";
-                showPreview(base64Str);
+                document.getElementById('base64-image').value = evt.target.result;
+                showPreview(evt.target.result);
             };
             reader.readAsDataURL(file);
         }
@@ -327,7 +529,6 @@
             const url = e.target.value;
             if (url) {
                 document.getElementById('base64-image').value = url;
-                document.getElementById('input-file').value = "";
                 showPreview(url);
             } else {
                 clearImage();
@@ -346,110 +547,15 @@
             document.getElementById('preview-container').classList.add('hidden');
         }
 
-        function renderManageList() {
-            const listContainer = document.getElementById('questions-list');
-            if (questions.length === 0) {
-                listContainer.innerHTML = "<p class='text-slate-500 text-center py-4'>Chưa có câu hỏi nào trong hệ thống.</p>";
-                return;
-            }
-
-            let html = "";
-            questions.forEach((q, idx) => {
-                html += `
-                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
-                        <div class="flex justify-between items-start">
-                            <span class="font-bold text-indigo-600 text-sm">Câu ${idx + 1}</span>
-                            <div class="space-x-2">
-                                <button onclick="editQuestion(${idx})" class="text-xs bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded-lg">Sửa</button>
-                                <button onclick="deleteQuestion(${idx})" class="text-xs bg-rose-500 hover:bg-rose-600 text-white px-3 py-1 rounded-lg">Xóa</button>
-                            </div>
-                        </div>
-                        <p class="font-medium text-slate-800">${q.question}</p>
-                        ${q.image ? `<div class="mt-2"><img src="${q.image}" class="max-h-24 rounded border border-slate-200 object-contain"></div>` : ''}
-                        <ul class="text-sm text-slate-600 grid grid-cols-1 md:grid-cols-2 gap-1 pl-4 list-disc mt-2">
-                            ${q.options.map((o, oIdx) => `<li class="${oIdx === q.correct ? 'text-emerald-700 font-semibold' : ''}">${o}</li>`).join('')}
-                        </ul>
-                    </div>
-                `;
-            });
-            listContainer.innerHTML = html;
-        }
-
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const editIdx = parseInt(document.getElementById('edit-index').value);
-            const questionText = document.getElementById('input-question').value;
-            const imageUrl = document.getElementById('base64-image').value;
-            const options = [
-                document.getElementById('input-opt-0').value,
-                document.getElementById('input-opt-1').value,
-                document.getElementById('input-opt-2').value,
-                document.getElementById('input-opt-3').value
-            ];
-            const correct = parseInt(document.getElementById('input-correct').value);
-            const explanation = document.getElementById('input-explanation').value;
-
-            const newQ = { question: questionText, image: imageUrl, options, correct, explanation };
-
-            if (editIdx === -1) {
-                questions.push(newQ);
-            } else {
-                questions[editIdx] = newQ;
-            }
-
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
-                resetForm();
-                renderManageList();
-                alert("Đã lưu câu hỏi thành công!");
-            } catch (err) {
-                alert("Bộ nhớ trình duyệt đầy! Vui lòng dùng URL ảnh thay vì tải ảnh trực tiếp.");
-            }
-        }
-
-        function editQuestion(idx) {
-            const q = questions[idx];
-            document.getElementById('edit-index').value = idx;
-            document.getElementById('input-question').value = q.question;
-            document.getElementById('base64-image').value = q.image || "";
-            
-            if (q.image) {
-                showPreview(q.image);
-            } else {
-                clearImage();
-            }
-
-            for (let i = 0; i < 4; i++) {
-                document.getElementById(`input-opt-${i}`).value = q.options[i];
-            }
-            document.getElementById('input-correct').value = q.correct;
-            document.getElementById('input-explanation').value = q.explanation;
-
-            document.getElementById('form-title').innerText = `✏️ Chỉnh Sửa Câu Hỏi #${idx + 1}`;
-            document.getElementById('submit-btn').innerText = "Cập Nhật";
-            document.getElementById('cancel-edit-btn').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function deleteQuestion(idx) {
-            if (confirm("Bạn có chắc chắn muốn xóa câu hỏi này không?")) {
-                questions.splice(idx, 1);
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
-                renderManageList();
-            }
-        }
-
         function resetForm() {
             document.getElementById('question-form').reset();
             document.getElementById('edit-index').value = "-1";
             clearImage();
-            document.getElementById('form-title').innerText = "➕ Thêm Câu Hỏi Mới";
-            document.getElementById('submit-btn').innerText = "Lưu Câu Hỏi";
-            document.getElementById('cancel-edit-btn').classList.add('hidden');
+            toggleFormFields();
         }
 
         function resetToDefaultQuestions() {
-            if (confirm("Khôi phục lại các câu hỏi mặc định ban đầu?")) {
+            if (confirm("Khôi phục bộ câu hỏi mặc định đa dạng?")) {
                 questions = [...defaultQuestions];
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
                 renderManageList();
