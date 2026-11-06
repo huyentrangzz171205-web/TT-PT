@@ -15,7 +15,7 @@
         <!-- Tiêu đề ứng dụng -->
         <header class="text-center mb-8">
             <h1 class="text-3xl font-bold text-indigo-600 mb-2">Trắc Nghiệm Truyền Thông Đa Phương Tiện</h1>
-            <p class="text-slate-500">Ôn tập kiến thức chuyên sâu, quản lý ngân hàng câu hỏi & tải ảnh minh họa</p>
+            <p class="text-slate-500">Ôn tập kiến thức truyền thông vô tuyến, phổ điện từ, MIMO & Wi-Fi thế hệ mới</p>
         </header>
 
         <!-- Thanh điều hướng Tab -->
@@ -73,7 +73,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">Nội dung câu hỏi:</label>
-                        <textarea id="input-question" required rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Nhập nội dung câu hỏi truyền thông đa phương tiện..."></textarea>
+                        <textarea id="input-question" required rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Nhập câu hỏi..."></textarea>
                     </div>
 
                     <!-- Khu vực chọn ảnh từ máy / điện thoại -->
@@ -142,7 +142,7 @@
             <!-- Danh sách câu hỏi đang có -->
             <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-100">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold text-slate-800">📋 Ngân Hàng Câu Hỏi Truyền Thông Đa Phương Tiện</h2>
+                    <h2 class="text-xl font-bold text-slate-800">📋 Danh Sách Câu Hỏi Hiện Có</h2>
                     <button onclick="resetToDefaultQuestions()" class="text-sm text-red-600 hover:underline">Khôi phục mặc định</button>
                 </div>
                 <div id="questions-list" class="space-y-4">
@@ -158,52 +158,52 @@
 
         const defaultQuestions = [
             {
-                question: "Theo lý thuyết cơ sở về hệ thống thông tin vô tuyến, môi trường truyền vô tuyến được định nghĩa và cấu thành từ bản chất nào sau đây?",
+                question: "Theo đặc tính vật lý của sóng điện từ trong môi trường truyền vô tuyến, khi tần số sóng truyền lan vượt quá ngưỡng 100 MHz thì sóng có xu hướng lan truyền theo đặc điểm nào?",
                 image: "",
                 options: [
-                    "Các đường truyền cáp đồng trục bọc giáp chống nhiễu trải dài qua không gian.",
-                    "Các dạng sóng điện từ có nhiều tần số khác nhau lan truyền trong không gian tự do.",
-                    "Hệ thống cáp quang ngầm truyền dẫn tín hiệu ánh sáng đơn sắc.",
-                    "Mạng lưới các đường dây điện thoại hữu tuyến truyền thống."
-                ],
-                correct: 1,
-                explanation: "Môi trường truyền vô tuyến bản chất sử dụng dải sóng điện từ với rất nhiều mức tần số khác nhau làm phương tiện mang tín hiệu qua không gian mà không cần cáp vật lý."
-            },
-            {
-                question: "Khi so sánh và sắp xếp các đại lượng đo tần số của sóng điện từ theo thứ tự tăng dần về mặt giá trị, dãy đơn vị nào sau đây là chính xác?",
-                image: "",
-                options: [
-                    "GHz → MHz → kHz → THz",
-                    "kHz → MHz → GHz → THz",
-                    "THz → GHz → MHz → kHz",
-                    "MHz → GHz → THz → kHz"
-                ],
-                correct: 1,
-                explanation: "Thứ tự tăng dần chuẩn xác từ thấp lên cao là: kHz (10^3 Hz) → MHz (10^6 Hz) → GHz (10^9 Hz) → THz (10^12 Hz)."
-            },
-            {
-                question: "Công nghệ Beamforming (chùm tia có hướng) hoạt động trong các hệ thống truyền dẫn vô tuyến hiện đại có nguyên lý cơ bản nào?",
-                image: "",
-                options: [
-                    "Phát sóng lan tỏa đều ra mọi hướng trong toàn bộ khu vực.",
-                    "Xác định vị trí của thiết bị nhận rồi tập trung đẩy năng lượng tín hiệu hướng về phía đó, giúp tăng cường độ mạnh và giảm nhiễu.",
-                    "Sử dụng cáp quang định hướng để kết nối trực tiếp các thiết bị.",
-                    "Chuyển đổi toàn bộ tín hiệu vô tuyến thành tia hồng ngoại cự ly ngắn."
-                ],
-                correct: 1,
-                explanation: "Beamforming định hướng chùm sóng tập trung thẳng vào vị trí của thiết bị nhận, giúp tối ưu hóa công suất phát và giảm thiểu nhiễu môi trường."
-            },
-            {
-                question: "Chuẩn IEEE 802.11ax (Wi-Fi 6) cải tiến công nghệ MU-MIMO như thế nào so với thế hệ 802.11ac trước đó?",
-                image: "",
-                options: [
-                    "Giảm số lượng luồng xuống còn 2 luồng.",
-                    "Chỉ hỗ trợ tối đa 4 luồng cho chiều download.",
-                    "Nâng cấp lên 8 luồng cho cả hai chiều upload và download đồng thời.",
-                    "Loại bỏ hoàn toàn công nghệ MU-MIMO."
+                    "Lan truyền đẳng hướng rộng khắp toàn bộ khu vực.",
+                    "Bị uốn cong hoàn toàn theo độ cong của Trái Đất.",
+                    "Lan truyền gần như theo đường thẳng và tập trung trong phạm vi hẹp.",
+                    "Chỉ truyền dẫn độc quyền bên trong cáp đồng trục."
                 ],
                 correct: 2,
-                explanation: "Wi-Fi 6 nâng cấp MU-MIMO lên 8 luồng không gian và mở rộng hỗ trợ đồng thời cả chiều upload lẫn download."
+                explanation: "Khi tần số trên 100 MHz, sóng vô tuyến lan truyền gần như theo đường thẳng (Line of Sight) và tập trung trong phạm vi hẹp."
+            },
+            {
+                question: "Điểm khác biệt cơ bản về mặt luồng dữ liệu giữa công nghệ Single-User MIMO (802.11n) và Multi-User MIMO (802.11ac) là gì?",
+                image: "",
+                options: [
+                    "SU-MIMO phát 4 luồng đến 4 thiết bị cùng lúc, còn MU-MIMO gộp 4 luồng cho 1 thiết bị.",
+                    "SU-MIMO tập trung toàn bộ các luồng dữ liệu tới 1 địa chỉ duy nhất tại mỗi thời điểm; còn MU-MIMO cho phép truyền đồng thời các luồng đến nhiều thiết bị khác nhau.",
+                    "SU-MIMO dùng sóng hồng ngoại, còn MU-MIMO dùng cáp quang.",
+                    "Cả hai công nghệ đều phát đơn luồng tuần tự."
+                ],
+                correct: 1,
+                explanation: "SU-MIMO chỉ phục vụ lần lượt từng địa chỉ thiết bị tại mỗi thời điểm. MU-MIMO cho phép Access Point phân chia nhiều luồng sóng phát tới nhiều thiết bị cùng một lúc trên cùng băng tần."
+            },
+            {
+                question: "Công nghệ BSS Color được giới thiệu trên chuẩn Wi-Fi 6 (802.11ax) có tác dụng gì trong việc tối ưu mạng không dây?",
+                image: "",
+                options: [
+                    "Tô màu giao diện trình quản lý mạng.",
+                    "Đánh dấu ('nhuộm màu') các nguồn nhiễu để thiết bị nhận biết và bỏ qua, giảm xung đột kênh.",
+                    "Phân chia màu sắc riêng biệt cho từng băng tần 2.4GHz và 5GHz.",
+                    "Mã hóa màu cho mật khẩu Wi-Fi."
+                ],
+                correct: 1,
+                explanation: "BSS Color đánh dấu mã màu cho các tín hiệu cùng kênh từ mạng lân cận, giúp thiết bị loại bỏ nhiễu và tránh nghẽn mạng."
+            },
+            {
+                question: "Chuẩn mạng không dây thế hệ mới IEEE 802.11be (Wi-Fi 7) sở hữu công nghệ đột phá nào cho phép thiết bị kết nối đồng thời trên nhiều băng tần (2.4 GHz, 5 GHz và 6 GHz)?",
+                image: "",
+                options: [
+                    "Adaptive Beamforming",
+                    "Multi-Link Operation (MLO)",
+                    "Orthogonal Frequency Division Multiple Access (OFDMA)",
+                    "Single-User Spatial Stream"
+                ],
+                correct: 1,
+                explanation: "Công nghệ Multi-Link Operation (MLO) trên Wi-Fi 7 cho phép thiết bị kết nối song song nhiều dải tần cùng lúc để đạt tốc độ cực đại và độ trễ siêu thấp."
             }
         ];
 
@@ -309,7 +309,6 @@
             loadQuiz();
         }
 
-        // Xử lý chọn file ảnh từ máy
         function handleFileSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -324,7 +323,6 @@
             reader.readAsDataURL(file);
         }
 
-        // Xử lý khi gõ URL ảnh
         function handleUrlInput(e) {
             const url = e.target.value;
             if (url) {
@@ -405,7 +403,7 @@
                 renderManageList();
                 alert("Đã lưu câu hỏi thành công!");
             } catch (err) {
-                alert("Bộ nhớ trình duyệt đã đầy do lưu ảnh quá nặng! Hãy xóa bớt câu hỏi hoặc chọn file ảnh nhẹ hơn.");
+                alert("Bộ nhớ trình duyệt đầy! Vui lòng dùng URL ảnh thay vì tải ảnh trực tiếp.");
             }
         }
 
@@ -451,7 +449,7 @@
         }
 
         function resetToDefaultQuestions() {
-            if (confirm("Khôi phục lại các câu hỏi mặc định môn Truyền Thông Đa Phương Tiện?")) {
+            if (confirm("Khôi phục lại các câu hỏi mặc định ban đầu?")) {
                 questions = [...defaultQuestions];
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
                 renderManageList();
