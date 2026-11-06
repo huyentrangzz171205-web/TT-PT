@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ứng Dụng Trắc Nghiệm Mạng Máy Tính Nâng Cao</title>
+    <title>Ứng Dụng Trắc Nghiệm Truyền Thông Đa Phương Tiện</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -14,8 +14,8 @@
         
         <!-- Tiêu đề ứng dụng -->
         <header class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-indigo-600 mb-2">Trắc Nghiệm Mạng Máy Tính Nâng Cao</h1>
-            <p class="text-slate-500">Ôn tập kiến thức, tương tác trực tiếp, chọn file ảnh trực tiếp từ thiết bị</p>
+            <h1 class="text-3xl font-bold text-indigo-600 mb-2">Trắc Nghiệm Truyền Thông Đa Phương Tiện</h1>
+            <p class="text-slate-500">Ôn tập kiến thức chuyên sâu, quản lý ngân hàng câu hỏi & tải ảnh minh họa</p>
         </header>
 
         <!-- Thanh điều hướng Tab -->
@@ -73,7 +73,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">Nội dung câu hỏi:</label>
-                        <textarea id="input-question" required rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Nhập câu hỏi..."></textarea>
+                        <textarea id="input-question" required rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Nhập nội dung câu hỏi truyền thông đa phương tiện..."></textarea>
                     </div>
 
                     <!-- Khu vực chọn ảnh từ máy / điện thoại -->
@@ -142,7 +142,7 @@
             <!-- Danh sách câu hỏi đang có -->
             <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-100">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold text-slate-800">📋 Danh Sách Câu Hỏi Hiện Có</h2>
+                    <h2 class="text-xl font-bold text-slate-800">📋 Ngân Hàng Câu Hỏi Truyền Thông Đa Phương Tiện</h2>
                     <button onclick="resetToDefaultQuestions()" class="text-sm text-red-600 hover:underline">Khôi phục mặc định</button>
                 </div>
                 <div id="questions-list" class="space-y-4">
@@ -154,24 +154,60 @@
 
     <!-- JavaScript xử lý logic -->
     <script>
+        const STORAGE_KEY = 'multimedia_quiz_v1';
+
         const defaultQuestions = [
             {
-                question: "Mạng không dây là hệ thống các thiết bị có khả năng giao tiếp thông qua gì?",
+                question: "Theo lý thuyết cơ sở về hệ thống thông tin vô tuyến, môi trường truyền vô tuyến được định nghĩa và cấu thành từ bản chất nào sau đây?",
                 image: "",
-                options: ["Cáp quang đa mốt", "Sóng điện từ", "Đường truyền cáp đồng trục", "Tín hiệu dòng điện trực tiếp"],
+                options: [
+                    "Các đường truyền cáp đồng trục bọc giáp chống nhiễu trải dài qua không gian.",
+                    "Các dạng sóng điện từ có nhiều tần số khác nhau lan truyền trong không gian tự do.",
+                    "Hệ thống cáp quang ngầm truyền dẫn tín hiệu ánh sáng đơn sắc.",
+                    "Mạng lưới các đường dây điện thoại hữu tuyến truyền thống."
+                ],
                 correct: 1,
-                explanation: "Mạng không dây truyền tải dữ liệu thông qua sóng điện từ (như sóng radio, hồng ngoại, vi ba) mà không cần cáp vật lý."
+                explanation: "Môi trường truyền vô tuyến bản chất sử dụng dải sóng điện từ với rất nhiều mức tần số khác nhau làm phương tiện mang tín hiệu qua không gian mà không cần cáp vật lý."
             },
             {
-                question: "Câu hỏi trọng tâm đặt ra trong slide khái niệm mạng không dây nhằm khám phá khía cạnh nào?",
+                question: "Khi so sánh và sắp xếp các đại lượng đo tần số của sóng điện từ theo thứ tự tăng dần về mặt giá trị, dãy đơn vị nào sau đây là chính xác?",
                 image: "",
-                options: ["Chi phí lắp đặt và bảo trì phần cứng.", "Lý do tồn tại (tại sao phải có) và lợi ích của mạng không dây.", "Tốc độ truyền tải tối đa của sóng điện từ.", "Các chuẩn bảo mật an toàn thông tin mạng."],
+                options: [
+                    "GHz → MHz → kHz → THz",
+                    "kHz → MHz → GHz → THz",
+                    "THz → GHz → MHz → kHz",
+                    "MHz → GHz → THz → kHz"
+                ],
                 correct: 1,
-                explanation: "Slide đặt ra câu hỏi 'Tại sao phải có mạng không dây? Lợi ích của mạng không dây là gì?' để tìm hiểu lý do tồn tại và lợi ích thực tiễn."
+                explanation: "Thứ tự tăng dần chuẩn xác từ thấp lên cao là: kHz (10^3 Hz) → MHz (10^6 Hz) → GHz (10^9 Hz) → THz (10^12 Hz)."
+            },
+            {
+                question: "Công nghệ Beamforming (chùm tia có hướng) hoạt động trong các hệ thống truyền dẫn vô tuyến hiện đại có nguyên lý cơ bản nào?",
+                image: "",
+                options: [
+                    "Phát sóng lan tỏa đều ra mọi hướng trong toàn bộ khu vực.",
+                    "Xác định vị trí của thiết bị nhận rồi tập trung đẩy năng lượng tín hiệu hướng về phía đó, giúp tăng cường độ mạnh và giảm nhiễu.",
+                    "Sử dụng cáp quang định hướng để kết nối trực tiếp các thiết bị.",
+                    "Chuyển đổi toàn bộ tín hiệu vô tuyến thành tia hồng ngoại cự ly ngắn."
+                ],
+                correct: 1,
+                explanation: "Beamforming định hướng chùm sóng tập trung thẳng vào vị trí của thiết bị nhận, giúp tối ưu hóa công suất phát và giảm thiểu nhiễu môi trường."
+            },
+            {
+                question: "Chuẩn IEEE 802.11ax (Wi-Fi 6) cải tiến công nghệ MU-MIMO như thế nào so với thế hệ 802.11ac trước đó?",
+                image: "",
+                options: [
+                    "Giảm số lượng luồng xuống còn 2 luồng.",
+                    "Chỉ hỗ trợ tối đa 4 luồng cho chiều download.",
+                    "Nâng cấp lên 8 luồng cho cả hai chiều upload và download đồng thời.",
+                    "Loại bỏ hoàn toàn công nghệ MU-MIMO."
+                ],
+                correct: 2,
+                explanation: "Wi-Fi 6 nâng cấp MU-MIMO lên 8 luồng không gian và mở rộng hỗ trợ đồng thời cả chiều upload lẫn download."
             }
         ];
 
-        let questions = JSON.parse(localStorage.getItem('mmtnc_questions')) || defaultQuestions;
+        let questions = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultQuestions;
         let currentIdx = 0;
         let score = 0;
         let answeredCurrent = false;
@@ -282,7 +318,7 @@
             reader.onload = function(evt) {
                 const base64Str = evt.target.result;
                 document.getElementById('base64-image').value = base64Str;
-                document.getElementById('input-image-url').value = ""; // Xóa url nếu đã chọn file
+                document.getElementById('input-image-url').value = "";
                 showPreview(base64Str);
             };
             reader.readAsDataURL(file);
@@ -293,7 +329,7 @@
             const url = e.target.value;
             if (url) {
                 document.getElementById('base64-image').value = url;
-                document.getElementById('input-file').value = ""; // Clear file chọn
+                document.getElementById('input-file').value = "";
                 showPreview(url);
             } else {
                 clearImage();
@@ -364,7 +400,7 @@
             }
 
             try {
-                localStorage.setItem('mmtnc_questions', JSON.stringify(questions));
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
                 resetForm();
                 renderManageList();
                 alert("Đã lưu câu hỏi thành công!");
@@ -400,7 +436,7 @@
         function deleteQuestion(idx) {
             if (confirm("Bạn có chắc chắn muốn xóa câu hỏi này không?")) {
                 questions.splice(idx, 1);
-                localStorage.setItem('mmtnc_questions', JSON.stringify(questions));
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
                 renderManageList();
             }
         }
@@ -415,9 +451,9 @@
         }
 
         function resetToDefaultQuestions() {
-            if (confirm("Khôi phục lại các câu hỏi mặc định ban đầu?")) {
+            if (confirm("Khôi phục lại các câu hỏi mặc định môn Truyền Thông Đa Phương Tiện?")) {
                 questions = [...defaultQuestions];
-                localStorage.setItem('mmtnc_questions', JSON.stringify(questions));
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
                 renderManageList();
                 loadQuiz();
             }
